@@ -25,16 +25,18 @@ runs:
         ssh -o StrictHostKeyChecking=no admin@${{ inputs.server-ip }} 'bash -s'  << EOF
         set -e
         MEDIA="API/app/public/media"
+        set
         echo "Heliaa Deployment script for BACKEND"
         echo "===================================="
         cd /var/www/docker
         docker compose down
         cd /var/www/deploy
-        if [ -d "$MEDIA" ]; then
+        if [ -d "API/app/public/media" ]; then
             mv API/app/public/media .
             echo "I moved media"
         else
             pwd
+            set
             echo "media >> $MEDIA"
             echo "I did not found media"
         fi
