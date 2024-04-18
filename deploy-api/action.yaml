@@ -1,0 +1,43 @@
+name: 'Deployment for API'
+description: 'Deploy API [Backend] to target server'
+inputs:
+  branch:
+    description: 'Target branch'
+    required: true
+  server-secret:
+    description: 'server secret fot ssh'
+    required: true
+  server-ip:
+    description: 'server ip address'
+    required: true
+
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ inputs.server-secret }}
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no admin@${{ inputs.server-ip }} 'bash -s'  << EOF
+        set -e
+        MEDIA="API/app/public/media"
+        echo "Heliaa Deployment script for BACKEND"
+        echo "===================================="
+        cd /var/www/docker
+        docker compose down
+        cd /var/www/deploy
+        if [ -d "$MEDIA" ]; then
+            mv API/app/public/media .
+        fi
+        sudo rm -rf API
+        git clone git@github.com:Heliaa-PT-Digital-Asia/API.git -b ${{ inputs.branch }}
+        cp .env API
+        mv media API/app/public
+        cd /var/www/docker
+        docker compose up -d
+        EOF
+      shell: bash
