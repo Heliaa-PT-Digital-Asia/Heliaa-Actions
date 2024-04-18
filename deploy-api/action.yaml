@@ -31,6 +31,7 @@ runs:
         cd /var/www/docker
         docker compose down
         cd /var/www/deploy
+        la -lah API/app/public/media
         if [ -d "API/app/public/media" ]; then
             mv API/app/public/media .
             echo "I moved media"
