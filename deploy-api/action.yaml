@@ -32,6 +32,9 @@ runs:
         cd /var/www/deploy
         if [ -d "$MEDIA" ]; then
             mv API/app/public/media .
+            echo "I moved media"
+        else
+            echo "I did not found media"
         fi
         sudo rm -rf API
         git clone git@github.com:Heliaa-PT-Digital-Asia/API.git -b ${{ inputs.branch }}
