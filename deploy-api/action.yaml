@@ -30,8 +30,8 @@ runs:
         cd /var/www/docker
         docker compose down
         cd /var/www/deploy
-        ls -lah API/app/public/media
-        if [ -d "API/app/public/media" ]; then
+        # ls -lah API/app/public/media
+        if [ -d "${MEDIA}" ]; then
             mv API/app/public/media .
             echo "I moved media"
         else
