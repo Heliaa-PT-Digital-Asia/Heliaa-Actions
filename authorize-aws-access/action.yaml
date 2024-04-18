@@ -1,0 +1,53 @@
+name: 'Authorize AWS Access'
+description: 'Authorize access to AWS security group for a specific IP address.'
+inputs:
+  aws-access-key-id:
+    description: 'The AWS access key ID.'
+    required: true
+  aws-secret-access-key:
+    description: 'The AWS secret access key.'
+    required: true
+  aws-region:
+    description: 'The AWS region where the security group is located.'
+    required: true
+  security-group-id:
+    description: 'The ID of the AWS security group.'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Retrieve Runner IP
+      id: runner-ip
+      run: echo "::set-output name=ip_address::$(curl -s https://api.ipify.org)"
+      shell: bash
+
+    - name: AWS CLI with cache
+      uses: Heliaa-PT-Digital-Asia/Heliaa-Actions/cache-aws-cli@main
+
+    - name: Configure AWS CLI
+      run: | 
+          aws configure set aws_access_key_id ${{ inputs.aws-access-key-id }} 
+          aws configure set aws_secret_access_key ${{ inputs.aws-secret-access-key }} 
+          aws configure set region ${{ inputs.aws-region }}
+      shell: bash
+
+    - name: Check the Credential
+      run: aws sts get-caller-identity
+      shell: bash
+
+    - name: Add Security Group
+      run: |
+        RUNNER_IP=$(echo "${{ steps.runner-ip.outputs.ip_address }}")
+        aws ec2 authorize-security-group-ingress \
+          --group-id ${{ inputs.security-group-id }} \
+          --region ${{ inputs.aws-region }} \
+          --protocol tcp \
+          --port 22 \
+          --cidr "${RUNNER_IP}/32" \
+          --tag-specifications 'ResourceType=security-group-rule,Tags=[{Key=Description,Value="Allow SSH access from GitHub runner IP"}]'
+
+        aws ec2 update-security-group-rule-descriptions-ingress \
+          --group-id ${{ inputs.security-group-id }} \
+          --region ${{ inputs.aws-region }} \
+          --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "'${RUNNER_IP}/32'", "Description": "Allow SSH access from GitHub runner IP"}]}]'
+      shell: bash

@@ -1,0 +1,31 @@
+name: 'Cache AWS CLI'
+description: 'Cache privileged file'
+
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check the cache
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: ./aws-cli.tar.gz
+        key: aws-cli-${{ runner.os }}-${{ github.repository }}
+
+    - name: Create Tarball
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        export DEBIAN_FRONTEND=noninteractive
+        export TZ=Asia/Kuala_Lumpur
+        sudo apt-get update
+        sudo apt-get install -y awscli
+        sudo tar -czf ./aws-cli.tar.gz /usr/bin/aws
+      shell: bash
+
+
+    - name: Restore and Extract Tarball
+      if: steps.cache.outputs.cache-hit == 'true'
+      run: |
+        sudo tar -xzf ./aws-cli.tar.gz -C ./
+        sudo mv ./usr/bin/aws /usr/bin/aws
+      shell: bash
