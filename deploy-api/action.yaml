@@ -36,7 +36,9 @@ runs:
         sudo rm -rf API
         git clone git@github.com:Heliaa-PT-Digital-Asia/API.git -b ${{ inputs.branch }}
         cp .env API
-        mv media API/app/public
+        if [ -d "./media"]; then
+          mv media API/app/public
+        fi
         cd /var/www/docker
         docker compose up -d
         EOF
