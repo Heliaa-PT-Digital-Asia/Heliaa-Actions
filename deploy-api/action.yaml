@@ -35,7 +35,7 @@ runs:
             echo "I moved media"
         else
             pwd
-            echo "media ${MEDIA}"
+            echo "media >> $MEDIA"
             echo "I did not found media"
         fi
         sudo rm -rf API
