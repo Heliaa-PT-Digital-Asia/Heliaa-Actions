@@ -14,9 +14,11 @@ runs:
   steps:
     - name: Set the filename variable
       run: echo "FILE_NAME=front-dist-$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+      shell: bash
 
     - name: Checkout code
       uses: actions/checkout@v2
+
     
     - name: Set up Node.js 18.17.1
       uses: actions/setup-node@v3
@@ -27,9 +29,11 @@ runs:
       run: |
         echo 'VITE_BASE_URL="${{ inputs.base-url }}"' >> .env
         echo 'VITE_API_URL="${{ inputs.api-url }}"' >> .env
+      shell: bash
     
     - name: Build Process
       run: |
         yarn install --check-files
         yarn build
         zip ${{ env.FILE_NAME }}.zip -rv dist
+      shell: bash
