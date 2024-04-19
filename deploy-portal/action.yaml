@@ -1,0 +1,42 @@
+name: 'Deploy portal'
+description: 'Deploy UI artifact to'
+inputs:
+  server-ip:
+    description: 'backend url'
+    required: true
+  server-secret:
+    description: 'front-end url'
+    required: true
+
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ inputs.server-secret }}
+    
+    - name: Transfer Zip file
+      run: |
+        sftp -o StrictHostKeyChecking=no admin@${{ inputs.server-ip }} << EOF           
+        put ${{ env.FILE_NAME }}.zip /var/www/deploy/${{ env.FILE_NAME }}.zip           
+        bye           
+        EOF
+      shell: bash
+    
+    - name: unzip file on target server
+      run: |
+        ssh -o StrictHostKeyChecking=no admin@${{ inputs.server-ip }} << EOF
+        set -e
+        cd /var/www/deploy
+        ls -lah
+        rm -rf portal
+        unzip "${{ env.FILE_NAME }}.zip" -d portal
+        cd portal
+        mv dist/* .
+        rm -rf dist
+        cd ..
+        rm -rf ${{ env.FILE_NAME }}.zip
+        EOF
+      shell: bash
