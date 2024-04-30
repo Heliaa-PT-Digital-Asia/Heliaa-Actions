@@ -1,0 +1,16 @@
+{
+    "workbench.colorCustomizations": {
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#e1cca3",
+        "statusBar.background": "#d4b67d",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#c7a057",
+        "statusBarItem.remoteBackground": "#d4b67d",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#d4b67d",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#d4b67d99",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.remoteColor": "#D4B67D"
+}

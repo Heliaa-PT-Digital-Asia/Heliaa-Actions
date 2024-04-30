@@ -7,6 +7,9 @@ inputs:
   api-url:
     description: 'front-end url'
     required: true
+  captcha-key:
+    description: 'captcha site key'
+    required: true
 
 
 runs:
@@ -29,6 +32,7 @@ runs:
       run: |
         echo 'VITE_BASE_URL="${{ inputs.base-url }}"' >> .env
         echo 'VITE_API_URL="${{ inputs.api-url }}"' >> .env
+        echo 'CAPTCHA_SITE_KYE="${{ inputs.captcha-key }}"' >> .env
       shell: bash
     
     - name: Build Process
