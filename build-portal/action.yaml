@@ -32,7 +32,7 @@ runs:
       run: |
         echo 'VITE_BASE_URL="${{ inputs.base-url }}"' >> .env
         echo 'VITE_API_URL="${{ inputs.api-url }}"' >> .env
-        echo 'CAPTCHA_SITE_KYE="${{ inputs.captcha-key }}"' >> .env
+        echo 'VITE_CAPTCHA_SITE_KYE="${{ inputs.captcha-key }}"' >> .env
       shell: bash
     
     - name: Build Process
