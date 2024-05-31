@@ -42,6 +42,10 @@ runs:
           mv media API/app/public
         fi
         cd /var/www/docker
+        echo "Cleaning up..."
+        docker system prune -f
+        docker network prune -f
+        echo "Bring server back..."
         docker compose up -d
         EOF
       shell: bash
