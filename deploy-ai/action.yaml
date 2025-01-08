@@ -29,10 +29,18 @@ runs:
         cd /var/www/docker
         docker compose down
         cd /var/www
-        mv app/AI_DB.db db
+
+        if [ -f "/var/www/app/AI_DB.db" ]; then
+          mv app/AI_DB.db db
+        fi
+
         sudo rm -rf app
         git clone git@github.com:Heliaa-PT-Digital-Asia/AI-Model-serving.git -b ${{ inputs.branch }} app
-        mv db/AI_DB.db app/
+
+        if [ -f "/var/www/db/AI_DB.db" ]; then
+          mv db/AI_DB.db app/
+        fi
+
         cd /var/www/docker
         echo "Cleaning up..."
         docker system prune -f
