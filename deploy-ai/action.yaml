@@ -28,13 +28,16 @@ runs:
         echo "===================================="
         cd /var/www/docker
         docker compose down
+        cd /var/www
+        mv app/AI_DB.db db
         sudo rm -rf app
         git clone git@github.com:Heliaa-PT-Digital-Asia/AI-Model-serving.git -b ${{ inputs.branch }} app
+        mv db/AI_DB.db app/
         cd /var/www/docker
         echo "Cleaning up..."
         docker system prune -f
         docker network prune -f
-        echo "Bring server back..."
+        echo "Bring server back up..."
         docker compose up -d
         EOF
       shell: bash
