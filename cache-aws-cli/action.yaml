@@ -7,9 +7,10 @@ runs:
   steps:
     - name: Check AWS CLI version
       run: aws --version
+      shell: bash
     
     - name: Check the cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       id: cache
       with:
         path: ./aws-cli.tar.gz
