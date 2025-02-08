@@ -25,8 +25,8 @@ runs:
       run: echo "::set-output name=ip_address::$(curl -s https://api.ipify.org)"
       shell: bash
 
-    - name: AWS CLI with cache
-      uses: Heliaa-PT-Digital-Asia/Heliaa-Actions/cache-aws-cli@main
+    # - name: AWS CLI with cache
+    #   uses: Heliaa-PT-Digital-Asia/Heliaa-Actions/cache-aws-cli@main
 
     - name: Configure AWS CLI
       run: | 
